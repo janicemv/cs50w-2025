@@ -1,0 +1,144 @@
+body {
+    font-family: Arial, sans-serif;
+
+}
+
+
+.upper-right {
+    margin-top: 1.5em;
+    text-align: right;
+    display: block;
+    padding-right: 15px;
+    line-height: 24px;
+    font-size: 14px;
+}
+
+.upper-right a {
+    text-decoration: none;
+    color: #1f1f1f;
+    margin-right: 1.5em;
+    
+}
+
+.upper-right a:hover {
+    text-decoration: underline;
+    color: #1f1f1f;
+    margin-right: 1.5em;
+    
+}
+
+#logo, #logo-img {
+    width: 272px;
+}
+
+#search, #search-img {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    row-gap: 3em; 
+}
+
+.searchbar {
+    border-radius: 24px;
+    box-shadow: 0px 2px 8px 0px rgba(60, 64, 67, 0.25);
+    border: 1px solid #dfe1e5;
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.searchbar:hover {
+    border: none;
+}
+
+.grey-btn {
+    border: none;
+    padding: 0 16px;
+    margin: 11px 4px;
+    background-color: #f8f9fa;
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    color: #3c4043;
+    font-size: 14px;
+    line-height: 27px;
+    height: 36px;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+}
+
+
+.grey-btn:hover {
+    border: 1px solid #dfe1e5;
+    box-shadow: 0px 2px 1px 0px rgba(60, 64, 67, 0.25);
+    color:#1f1f1f;
+
+}
+
+.images {
+    color: #4285f4;
+    font: 16px / 16px Arial, sans-serif;
+    bottom: 0;
+    margin-top: 0;
+    white-space: nowrap;
+    justify-self: right;
+}
+
+.logo {
+    margin-top: 1.5em;
+    line-height: 24px;
+
+    
+}
+
+#logo-adv {
+    width: 60px;
+    margin-bottom: 1.3em;
+
+}
+
+.advanced {
+    color: #d93025;
+    text-align: left;
+    font-size: 20px;
+    margin-left: 2em;
+}
+
+.text {
+    font-size: 16px;
+}
+
+.adv-field {
+    margin-top: 1em;
+    font-size: 13px;
+}
+
+.label-adv {
+    width: 20%;
+}
+
+.input-adv {
+    min-width: 167px;
+    width: 50%;
+}
+
+.blue-btn {
+    border: none;
+    padding: 0 12px;
+    margin: 10px 0;
+    min-width: 120px;
+    background-color: #4d90fe;
+    background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+    border: 1px solid #3079ed;
+    border-radius: 2px;
+    color: #fff;
+    /* float: right; */
+    font-size: 11px;
+    font-weight: bold;;
+    line-height: 27px;
+    height: 30px;
+    cursor: default;
+    user-select: none;
+    text-align: center;
+}
