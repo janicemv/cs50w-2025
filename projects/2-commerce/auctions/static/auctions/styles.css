@@ -2,6 +2,10 @@ body {
     padding: 10px;
 }
 
+.nav-link a {
+    color: #6f42c1;
+}
+
 .card {
     min-height: 400px;
 }

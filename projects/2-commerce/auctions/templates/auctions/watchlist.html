@@ -15,7 +15,11 @@
                 <h5 class="card-title">{{ listing.title }}</h5>
                 <p class="card-text">{{ listing.description }}</p>
                 <p class="card-text font-weight-bold">€ {{ listing.price|floatformat:2 }}</p>
+                {% if listing.isActive %}
                 <a href="{% url 'listing' id=listing.id %}" class="btn btn-info">Details</a>
+                {% else %}
+                <p class="btn btn-danger" disabled>Item sold</p>
+                {% endif %}
             </div>
         </div>
     </div>

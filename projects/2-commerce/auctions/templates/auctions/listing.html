@@ -1,31 +1,124 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<h2>Product: {{ listing.title }}</h2>
+    <h2>Product: {{ listing.title }}</h2>
 
-
-<div class="card mb-3">
-    <div class="row mt-2">
-        {% if user.is_authenticated %}
-            {% if isListingInWatchlist %}
-                <form action="{% url 'removeFromWatchlist' listing.id %}" method="POST">
-                    {% csrf_token %}
-                    <button class="btn btn-danger" title="Remove from Watchlist"><i class="fa-solid fa-eye-slash"></i></button>
-                </form>
-            {% else %}
-                <form action="{% url 'addToWatchlist' listing.id %}" method="POST">
-                    {% csrf_token %}
-                    <button class="btn btn-success" title="Add to Watchlist"><i class="fa-solid fa-eye"></i></button>
-                </form>
-            {% endif %}
+    <div>
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    {% if 'bid' in message.extra_tags %}
+                <div class="alert alert-{{ message.level_tag }}">
+                    {{ message }}
+                </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
-    <img src="{{ listing.imageUrl }}" class="card-img-listing mt-4" alt{{ listing.title }}>
-    <div class="card-body">
-      <h5 class="card-title">{{ listing.title }}</h5>
-      <p class="card-text">{{ listing.description }}</p>
-      <p class="card-text">Owner: {{ listing.owner }}</p>
-      <p class="card-text h3">€ {{ listing.price|floatformat:2 }}</p>
+
+    <div class="card mb-3">
+            {% if user.is_authenticated %}
+                {% if isListingInWatchlist %}
+                    <form action="{% url 'removeFromWatchlist' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" title="Remove from Watchlist"><i class="fa-solid fa-eye-slash"></i></button>
+                    </form>
+                {% else %}
+                    <form action="{% url 'addToWatchlist' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-success" title="Add to Watchlist"><i class="fa-solid fa-eye"></i></button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        <img src="{{ listing.imageUrl }}" class="card-img-listing mt-4" alt{{ listing.title }}>
+        <div class="card-body">
+            <h5 class="card-title">{{ listing.title }}</h5>
+            <p class="card-text">{{ listing.description }}</p>
+            <p class="card-text">Owner: {{ listing.owner }}</p>
+            <p class="card-text h4">
+                {% if listing.isActive %}Initial price: 
+                {% else %}Sold For:
+                {% endif %}
+                 € {{ listing.price.bid|floatformat:2 }}</p>
+
+            <div class="form-group">
+                {% if user.is_authenticated %}
+                    {% if listing.isActive %}
+                        <form action="{% url 'addBid' listing.id %}" method="POST">
+                            {% csrf_token %}
+        
+                            <input type="number" name="newBid" min="0" placeholder="Add New Bid">
+                            <button type="submit" class="btn btn-warning">Bid</button>
+                        </form>
+                    
+                        {% if isOwner %}
+                            <form action="{% url 'closeAuction' listing.id %}" method="POST">
+                                {% csrf_token %}
+                                <button class="btn btn-info" title="Close Auction"><i class="fa-solid fa-gavel"></i> Close Auction</button>
+                            </form>
+                        {% endif %}
+
+                    {% elif user == listing.price.user %}
+                            <div class="alert alert-success">
+                                <p>Congratulations, you won this Auction!</p>
+                            </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div>
+                {% if messages %}
+                    <div class="container mt-3">
+                        {% for message in messages %}
+                            {% if 'closed' in message.extra_tags %}
+                        <div class="alert alert-{{ message.level_tag }}">
+                            {{ message }}
+                        </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
-  </div>
+
+    <div class="mt-2">
+        <h3>Comments</h3>
+        <div class="form-group">
+            {% if user.is_authenticated %}
+                <form action="{% url 'addComment' listing.id %}" method="POST">
+                    {% csrf_token %}
+
+                    <input type="text" name="newComment" placeholder="Add New Comment">
+                    <button type="submit" class="btn btn-success">Post Comment</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div>
+            {% if messages %}
+                <div class="container mt-3">
+                    {% for message in messages %}
+                        {% if 'comment' in message.extra_tags %}
+                    <div class="alert alert-{{ message.level_tag }}">
+                        {{ message }}
+                    </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div>
+            <ul class="list-group"></ul>
+            {% for comment in allComments %}
+            
+                <li class="list-group-item">{{ comment.message }} <small class="text-muted">({{ comment.author }})</small></li>
+
+            {% endfor %}
+        </ul>
+
+
+        </div>
+    </div>
 {% endblock %}
