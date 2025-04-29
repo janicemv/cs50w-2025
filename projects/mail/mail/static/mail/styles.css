@@ -1,0 +1,28 @@
+textarea {
+    min-height: 400px;
+}
+
+.email-info, .title {
+   border: 1px rgb(5, 3, 142) dotted;
+   margin-bottom: 4px;
+   border-radius: 0.5em;
+}
+
+.title {
+    color: white;
+}
+
+.unread {
+    background-color: white;
+    font-weight: 500;
+}
+
+.read {
+    background-color: rgb(232, 230, 230);
+}
+
+.view-email {
+   border: 1px rgb(5, 3, 142) dotted;
+   border-radius: 0.5em;
+   padding: 1em;
+}
