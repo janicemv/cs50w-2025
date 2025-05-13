@@ -13,9 +13,9 @@ Using Python, JavaScript, HTML, and CSS, complete the implementation of a social
     - [x] Display the number of followers the user has, as well as the number of people that the user follows.
     - [X] Display all of the posts for that user, in reverse chronological order.
     - [X] For any other user who is signed in, this page should also display a “Follow” or “Unfollow” button that will let the current user toggle whether or not they are following this user’s posts. Note that this only applies to any “other” user: a user should not be able to follow themselves.
-- [] **Following:** The “Following” link in the navigation bar should take the user to a page where they see all posts made by users that the current user follows.
-    - [] This page should behave just as the “All Posts” page does, just with a more limited set of posts.
-    - [] This page should only be available to users who are signed in.
+- [X] **Following:** The “Following” link in the navigation bar should take the user to a page where they see all posts made by users that the current user follows.
+    - [X] This page should behave just as the “All Posts” page does, just with a more limited set of posts.
+    - [X] This page should only be available to users who are signed in.
 - [X] **Pagination:** On any page that displays posts, posts should only be displayed 10 on a page. If there are more than ten posts, a “Next” button should appear to take the user to the next page of posts (which should be older than the current page of posts). If not on the first page, a “Previous” button should appear to take the user to the previous page of posts as well.
     - [] See the Hints section for some suggestions on how to implement this.
 - [] **Edit Post:** Users should be able to click an “Edit” button or link on any of their own posts to edit that post.

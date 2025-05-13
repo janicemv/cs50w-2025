@@ -12,7 +12,7 @@
     <form action="{% url 'newPost' %}" method="POST">
         {% csrf_token %}
         <div class="mb-3">
-            <textarea class="form-control" name="content" maxlength="140" placeholder="max 140 characters"></textarea>
+            <textarea class="form-control" id="content" name="content" maxlength="140" placeholder="max 140 characters"></textarea>
         </div>
         <div class="col-12">
             <input type="submit" value="Post" class="btn btn-info">

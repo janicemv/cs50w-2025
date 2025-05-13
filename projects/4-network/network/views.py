@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 from .models import User, Post, Follow
 
@@ -20,7 +22,15 @@ def index(request):
         "pagePosts": pagePosts
     })
 
+def newPost(request):
+    if request.method =="POST":
+        content = request.POST['content']
+        user = User.objects.get(pk=request.user.id)
+        post = Post(content=content, user=user)
+        post.save()
 
+        return HttpResponseRedirect(reverse("index"))
+    
 def profile(request, user_id):
     user = User.objects.get(pk=user_id)
     userPosts = Post.objects.filter(user=user).order_by("id").reverse()
@@ -48,28 +58,34 @@ def profile(request, user_id):
         "userProfile": user
     })
 
-# PAREI AQUI - CONSERTAR FOLLOW E UNFOLLOW
-def follow(request):
-    userToFollowInfo = request.POST['userToFollow']
-    print("userToFollowInfo:", userToFollowInfo)
-    loggedUser = User.objects.get(pk=request.user.id)
-    userToFollow = User.objects.get(username=userToFollowInfo)
-    f = Follow(follower=loggedUser, followed=userToFollow)
-    f.save()
-    user_id = userToFollow.id
-    
-    return HttpResponseRedirect(reverse(profile, kwargs={'user_id': user_id}))
+def follow(request, user_id):
 
-
-def unfollow(request):
-    userToFollowInfo = request.POST['userToFollow']
-    loggedUser = User.objects.get(pk=request.user.id)
-    userToFollow = User.objects.get(username=userToFollowInfo)
-    f = Follow.objects.get(follower=loggedUser, followed=userToFollow)
-    f.delete()
-    user_id = userToFollow.id
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
     
-    return HttpResponseRedirect(reverse(profile, kwargs={'user_id': user_id}))
+    userToFollow = get_object_or_404(User, pk=user_id)
+
+    if request.user == userToFollow:
+        return JsonResponse({"error": "You cannot follow yourself."}, status=400)
+    
+    isFollowing = Follow.objects.filter(follower=request.user, followed=userToFollow).exists()
+
+    if isFollowing:
+        Follow.objects.filter(follower=request.user, followed=userToFollow).delete()
+        action= "unfollowed"
+    else:
+        Follow.objects.create(follower=request.user, followed=userToFollow)
+        action= "followed"
+    
+    followers_count = Follow.objects.filter(followed=userToFollow).count()
+
+    return JsonResponse({
+        "success": True,
+        "action": action,
+        "followersCount": followers_count,
+        "isFollowing": isFollowing
+    })
+
 
 def login_view(request):
     if request.method == "POST":
@@ -122,11 +138,3 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-def newPost(request):
-    if request.method =="POST":
-        content = request.POST['content']
-        user = User.objects.get(pk=request.user.id)
-        post = Post(content=content, user=user)
-        post.save()
-
-        return HttpResponseRedirect(reverse("index"))

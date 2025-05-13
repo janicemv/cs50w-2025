@@ -6,7 +6,7 @@
 
 {% if user.is_authenticated %}
 
-<h2>Hi, {{ username }}!</h2>
+<h2 id="user-profile">{{ username }}</h2>
 
 
 <div class="user-info">
@@ -16,24 +16,23 @@
         <span id="following">{{ follower.count }}</span></strong> following
     </p>
 
-    <div class="my-3">
+    <div class="follow-button my-3">
         {% if user != userProfile %}
-            {% if isFollowing %}
-            <form action="{% url 'unfollow' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="userToFollow" value="userToFollow">
-                <input class="btn btn-danger" type="submit" value="Unfollow">
-            </form>
-            {% else %}
-            <form action="{% url 'follow' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="userToFollow" value="userToFollow">
-                <input class="btn btn-success" type="submit" value="Follow">
-            </form>
-        
-            {% endif %}
-        
+       
+            {% csrf_token %}
+           
+            <button id="follow-btn" data-isfollowing="{{ isFollowing }}" data-userid="{{ userProfile.id }}">
+                {% if isFollowing %}
+                Unfollow
+                {% else %}
+                Follow
+                {% endif %}
+            </button>
+        </form>
+
         {% endif %}
+
+        
     </div>
 
 </div>
@@ -48,7 +47,8 @@
         <p class="mb-0 posr-date"><small>{{ post.date }}</small></p>
         <p class="mb-0 post-content">{{ post.content }}</p>
         <p class="mb-0 post-author">by <strong>{{ post.user }}</strong> <i class="fa-regular fa-star like-star"></i>
-            <span id="likes">0</span></p>
+            <span id="likes">0</span>
+        </p>
     </div>
 
     {% endfor %}
@@ -66,7 +66,11 @@
 
 </div>
 
+{% else %}
+<p>You must be logged in to view this page.</p>
+
+
 {% endif %}
-    
+
 
 {% endblock %}
