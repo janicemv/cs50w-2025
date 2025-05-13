@@ -1,0 +1,19 @@
+.post-date {
+    color: lightblue;
+}
+
+.post-content {
+    font-size: 1.2em;
+}
+
+.post-author {
+    color: grey;
+}
+
+.like-star, #likes {
+    color: orange;
+}
+
+#followers, #following {
+    font-weight: 500;
+}
