@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+import json
 
 from .models import User, Post, Follow
 
@@ -57,6 +58,21 @@ def profile(request, user_id):
         "isFollowing": isFollowing,
         "userProfile": user
     })
+
+def edit_post(request, post_id):
+    if request.method == "POST":
+        try:
+            post = Post.objects.get(pk=post_id, user=request.user)
+        except Post.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Post not found."}, status=404)
+
+        data = json.loads(request.body)
+        post.content = data.get("content", post.content)
+        post.save()
+
+        return JsonResponse({"success": True})
+    
+    return JsonResponse({"success": False, "error": "Not allowed"}, status=405)
 
 def follow(request, user_id):
 

@@ -13,58 +13,33 @@
 
     <p>
         <span id="followers">{{ followed.count }}</span></strong> followers
+        <span>  |  </span>
         <span id="following">{{ follower.count }}</span></strong> following
     </p>
 
     <div class="follow-button my-3">
         {% if user != userProfile %}
-       
-            {% csrf_token %}
-           
-            <button id="follow-btn" data-isfollowing="{{ isFollowing }}" data-userid="{{ userProfile.id }}">
-                {% if isFollowing %}
-                Unfollow
-                {% else %}
-                Follow
-                {% endif %}
-            </button>
+
+        {% csrf_token %}
+
+        <button id="follow-btn" class="btn {% if isFollowing %}btn-danger{% else %}btn-success{% endif %}"
+            data-isfollowing="{{ isFollowing|yesno:" true,false" }}" data-userid="{{ userProfile.id }}">
+            <i id="follow-icon" class="fa-solid {% if isFollowing %}fa-eye-slash{% else %}fa-eye{% endif %}"></i>
+            <span id="btn-text">{% if isFollowing %}Unfollow{% else %}Follow{% endif %}</span>
+        </button>
         </form>
 
         {% endif %}
 
-        
+
     </div>
 
 </div>
 
-<div id="all-posts my-3">
+ <h2>{{ userProfile }}'s Posts</h2>
 
-    <h2>Your Posts</h2>
+{% include "network/posts.html" %}
 
-    {% for post in pagePosts %}
-
-    <div class="post border my-3 mx-3 px-3 py-2">
-        <p class="mb-0 posr-date"><small>{{ post.date }}</small></p>
-        <p class="mb-0 post-content">{{ post.content }}</p>
-        <p class="mb-0 post-author">by <strong>{{ post.user }}</strong> <i class="fa-regular fa-star like-star"></i>
-            <span id="likes">0</span>
-        </p>
-    </div>
-
-    {% endfor %}
-
-    <ul class="pagination">
-        {% if pagePosts.has_previous %}
-        <li class="page-item"><a class="page-link" href="?page={{ pagePosts.previous_page_number }}">Previous</a></li>
-
-        {% endif %}
-        {% if pagePosts.has_next %}
-        <li class="page-item"><a class="page-link" href="?page={{ pagePosts.next_page_number }}">Next</a></li>
-        {% endif %}
-    </ul>
-    </nav>
-
-</div>
 
 {% else %}
 <p>You must be logged in to view this page.</p>

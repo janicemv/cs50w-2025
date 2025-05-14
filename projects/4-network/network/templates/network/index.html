@@ -6,48 +6,14 @@
 
 {% if user.is_authenticated %}
 
-<div class="new-post my-3">
-    <h2>New Post</h2>
+<h2>New Post</h2>
 
-    <form action="{% url 'newPost' %}" method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-            <textarea class="form-control" id="content" name="content" maxlength="140" placeholder="max 140 characters"></textarea>
-        </div>
-        <div class="col-12">
-            <input type="submit" value="Post" class="btn btn-info">
-        </div>
-    </form>
-</div>
+{% include "network/new_post.html" %}
 
 {% endif %}
 
-<div id="all-posts my-3">
+ <h2>All Posts</h2>
 
-    <h2>All Posts</h2>
-
-    {% for post in pagePosts %}
-
-    <div class="post border my-3 mx-3 px-3 py-2">
-        <p class="mb-0 posr-date"><small>{{ post.date }}</small></p>
-        <p class="mb-0 post-content">{{ post.content }}</p>
-        <p class="mb-0 post-author">by <strong>{{ post.user }}</strong> <i class="fa-regular fa-star like-star"></i>
-            <span id="likes">0</span></p>
-    </div>
-
-    {% endfor %}
-
-    <ul class="pagination">
-        {% if pagePosts.has_previous %}
-        <li class="page-item"><a class="page-link" href="?page={{ pagePosts.previous_page_number }}">Previous</a></li>
-
-        {% endif %}
-        {% if pagePosts.has_next %}
-        <li class="page-item"><a class="page-link" href="?page={{ pagePosts.next_page_number }}">Next</a></li>
-        {% endif %}
-    </ul>
-    </nav>
-
-</div>
+{% include "network/posts.html" %}
 
 {% endblock %}

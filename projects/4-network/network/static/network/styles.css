@@ -1,5 +1,12 @@
+.post {
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #fbfdffcc; /* AliceBlue with 80% opacity */
+}
 .post-date {
-    color: lightblue;
+    color: rgb(28, 165, 211);
 }
 
 .post-content {
@@ -7,7 +14,7 @@
 }
 
 .post-author {
-    color: grey;
+    color: #031589;
 }
 
 .like-star, #likes {
@@ -16,4 +23,9 @@
 
 #followers, #following {
     font-weight: 500;
+}
+
+a {
+    text-decoration: none;
+    color:#031589;
 }
