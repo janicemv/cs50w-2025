@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // Follow/Unfollow Button
     const followBtn = document.getElementById('follow-btn');
 
     if (followBtn) {
@@ -48,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Edit Post
+
     const editButtons = document.querySelectorAll('.edit-btn');
 
     editButtons.forEach(button => {
@@ -84,30 +88,82 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ content: newContent })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error editing post.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    const postContent = document.getElementById(`post-content-${postId}`);
-                    postContent.textContent = newContent;
-                    console.log('Post edited successfully:', data);
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error editing post.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const postContent = document.getElementById(`post-content-${postId}`);
+                        postContent.textContent = newContent;
+                        console.log('Post edited successfully:', data);
 
-                    document.getElementById(`edit-post-${postId}`).classList.add('d-none');
-                    postContent.classList.remove('d-none');
-                }
-            })
-            .catch(error => {
-                console.error('Error editing:', error);
-            });
+                        document.getElementById(`edit-post-${postId}`).classList.add('d-none');
+                        postContent.classList.remove('d-none');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error editing:', error);
+                });
         });
     });
+
+    // Like/Unlike Post
+    // PAREI AQUI
+
+    const likeButtons = document.querySelectorAll('.like-btn');
+
+    likeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const postId = button.dataset.postid;
+            const like = document.getElementById(`like-post-${postId}`);
+
+           fetch(`/like/${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') 
+                },
+                body: JSON.stringify({ action: isFollowing ? 'unfollow' : 'follow' })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erroe in requisition.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Test: Response received', data);
+
+                    if (data.success) {
+                        btnText.textContent = isFollowing ? 'Unfollow' : 'Follow';
+
+                        followBtn.setAttribute('data-isfollowing', (!isFollowing).toString());
+
+                        followIcon.classList.remove(isFollowing ? 'fa-eye' : 'fa-eye-slash');
+                        followIcon.classList.add(isFollowing ? 'fa-eye-slash' : 'fa-eye');
+
+                        followBtn.classList.remove(isFollowing ? 'btn-success' : 'btn-danger');
+                        followBtn.classList.add(isFollowing ? 'btn-danger' : 'btn-success');
+
+                        const followersCountEl = document.getElementById('followers');
+                        if (followersCountEl && data.followersCount !== undefined) {
+                            followersCountEl.textContent = data.followersCount;
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+        });
+    });
+    
 });
 
 
+// Get CSRF token
+// From https://docs.djangoproject.com/en/4.2/ref/csrf/#ajax
 
 function getCookie(name) {
     let cookieValue = null;

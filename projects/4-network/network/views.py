@@ -31,6 +31,7 @@ def newPost(request):
         post.save()
 
         return HttpResponseRedirect(reverse("index"))
+
     
 def profile(request, user_id):
     user = User.objects.get(pk=user_id)
@@ -59,6 +60,7 @@ def profile(request, user_id):
         "userProfile": user
     })
 
+@login_required
 def edit_post(request, post_id):
     if request.method == "POST":
         try:
@@ -102,6 +104,25 @@ def follow(request, user_id):
         "isFollowing": isFollowing
     })
 
+def following(request):
+    currentUser = User.objects.get(pk=request.user.id)
+    following = Follow.objects.filter(follower=currentUser)
+
+    allPosts = Post.objects.filter(user__in=following.values_list('followed', flat=True)).order_by("id").reverse()
+    
+
+    paginator = Paginator(allPosts, 10)
+    pageNumber = request.GET.get('page')
+    pagePosts = paginator.get_page(pageNumber)
+
+    return render(request, "network/following.html", {
+        "allPosts": allPosts,
+        "pagePosts": pagePosts
+    })
+
+# PAREI AQUI
+def like(request, post_id):
+    return
 
 def login_view(request):
     if request.method == "POST":

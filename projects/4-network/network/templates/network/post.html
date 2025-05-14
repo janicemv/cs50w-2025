@@ -1,0 +1,23 @@
+<div class="post border my-3 mx-3 px-3 py-2 d-flex flex-column" id="post-{{ post.id }}">
+    <div class="d-flex justify-content-between">
+        <p class="mb-0 post-date"><small>{{ post.date }}</small></p>
+        {% if user == post.user %}
+        <button class="mb-0 text-end btn btn-sm btn-warning edit-btn" data-postid="{{ post.id }}">
+            <small>Edit</small>
+        </button>
+        {% endif %}
+    </div>
+    <p class="mb-0 post-content" id="post-content-{{ post.id }}">{{ post.content }}</p>
+
+    <div id="edit-post-{{ post.id }}" class="mb-3 d-none">
+        <form class="edit-post-form" data-postid="{{ post.id }}">
+            {% csrf_token %}
+            <textarea class="form-control edit-content" rows="3">{{ post.content }}</textarea>
+            <button type="submit" class="btn btn-info btn-sm mt-2">Save</button>
+        </form>
+    </div>
+    <p class="mb-0 post-author">by <strong><a href="{% url 'profile' user_id=post.user.id %}">{{ post.user }}</a></strong> |
+        <i class="fa-regular fa-star like-star"></i>
+        <span id="likes">0</span>
+    </p>
+</div>

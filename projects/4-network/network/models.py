@@ -19,3 +19,10 @@ class Follow(models.Model):
 
     def __str__(self):
         return f"{self.follower} follows {self.followed}"
+    
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_like")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post_like")
+
+    def __str__(self):
+        return f"{self.user} liked {self.post} from {self.post.user}"
